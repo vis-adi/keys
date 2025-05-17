@@ -19,6 +19,9 @@ const addUserModal = document.getElementById('add-user-modal');
 const addUserBtn = document.getElementById('add-user-btn');
 const cancelAddUserBtn = document.getElementById('cancel-add-user');
 const addUserForm = document.getElementById('add-user-form');
+const deleteBtn = document.getElementById('delete-mode-btn');
+
+let isDeleteMode = false;
 
 function showPage(pageId) {
   Object.values(pages).forEach(page => page.classList.add('hidden'));
@@ -43,8 +46,10 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
 function renderDashboard() {
   const grid = document.getElementById('users-grid');
   grid.innerHTML = users.map(user => `
-    <div class="user-card">
-      <button class="delete-user" onclick="deleteUser(${user.id})">×</button>
+    <div class="user-card" data-id="${user.id}">
+      <div class="checkbox-container">
+        <input type="checkbox" class="user-checkbox" data-id="${user.id}">
+      </div>
       <h3>${user.username}</h3>
       <div class="user-info">
         <p>ID: #${user.id}</p>
@@ -56,6 +61,17 @@ function renderDashboard() {
       </div>
     </div>
   `).join('');
+
+  // Add delete actions bar if not exists
+  if (!document.querySelector('.delete-actions')) {
+    const deleteActions = document.createElement('div');
+    deleteActions.className = 'delete-actions';
+    deleteActions.innerHTML = `
+      <button class="btn-secondary" onclick="cancelDelete()">Cancel</button>
+      <button class="btn-danger" onclick="deleteSelectedUsers()">Delete Selected</button>
+    `;
+    document.getElementById('dashboard-page').appendChild(deleteActions);
+  }
 }
 
 // Add user functionality
@@ -87,14 +103,38 @@ addUserForm.addEventListener('submit', (e) => {
   addUserForm.reset();
 });
 
-// Delete user functionality
-function deleteUser(userId) {
-  if (confirm('Are you sure you want to delete this user?')) {
+// Delete functionality
+deleteBtn.addEventListener('click', () => {
+  isDeleteMode = !isDeleteMode;
+  const dashboard = document.getElementById('dashboard-page');
+  dashboard.classList.toggle('delete-mode', isDeleteMode);
+});
+
+function cancelDelete() {
+  isDeleteMode = false;
+  const dashboard = document.getElementById('dashboard-page');
+  dashboard.classList.remove('delete-mode');
+  document.querySelectorAll('.user-checkbox').forEach(checkbox => {
+    checkbox.checked = false;
+  });
+}
+
+function deleteSelectedUsers() {
+  const selectedUsers = Array.from(document.querySelectorAll('.user-checkbox:checked'))
+    .map(checkbox => parseInt(checkbox.dataset.id));
+
+  if (selectedUsers.length === 0) {
+    alert('Please select users to delete');
+    return;
+  }
+
+  if (confirm(`Are you sure you want to delete ${selectedUsers.length} user(s)?`)) {
     // Hook for backend integration
-    deleteUserFromBackend(userId);
+    selectedUsers.forEach(userId => deleteUserFromBackend(userId));
     
-    users = users.filter(user => user.id !== userId);
+    users = users.filter(user => !selectedUsers.includes(user.id));
     renderDashboard();
+    cancelDelete();
   }
 }
 
