@@ -33,6 +33,7 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
   }
 });
 
+// Dashboard rendering
 function renderDashboard() {
   const grid = document.getElementById('users-grid');
   grid.innerHTML = users.map(user => `
@@ -46,39 +47,20 @@ function renderDashboard() {
         <p>Device: ${user.device}</p>
         <p>Status: ${user.status}</p>
       </div>
+      <button onclick="showLogs(${user.id})" class="btn-small">View Logs</button>
     </div>
   `).join('');
 
-  attachCheckboxListeners();
-
-  // Ensure delete actions exist
+  // Add delete actions bar if not exists
   if (!document.querySelector('.delete-actions')) {
     const deleteActions = document.createElement('div');
-    deleteActions.className = 'delete-actions hidden';
+    deleteActions.className = 'delete-actions';
     deleteActions.innerHTML = `
       <button class="btn-secondary" onclick="cancelDelete()">Cancel</button>
       <button class="btn-danger" onclick="deleteSelectedUsers()">Delete Selected</button>
     `;
     document.getElementById('dashboard-page').appendChild(deleteActions);
   }
-}
-
-function attachCheckboxListeners() {
-  document.querySelectorAll('.user-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-      const checked = document.querySelectorAll('.user-checkbox:checked');
-      const dashboard = document.getElementById('dashboard-page');
-      const deleteBar = document.querySelector('.delete-actions');
-
-      if (checked.length > 0) {
-        dashboard.classList.add('delete-mode');
-        deleteBar.classList.remove('hidden');
-      } else {
-        dashboard.classList.remove('delete-mode');
-        deleteBar.classList.add('hidden');
-      }
-    });
-  });
 }
 
 // Add user functionality
@@ -101,7 +83,7 @@ cancelAddUserBtn.addEventListener('click', () => {
 
 addUserForm.addEventListener('submit', (e) => {
   e.preventDefault();
-
+  
   const newUser = {
     id: users.length + 1,
     username: document.getElementById('new-username').value,
@@ -116,21 +98,17 @@ addUserForm.addEventListener('submit', (e) => {
   addUserForm.reset();
 });
 
-// Manual delete mode toggle (optional button)
+// Delete functionality
 deleteBtn.addEventListener('click', () => {
   isDeleteMode = !isDeleteMode;
   const dashboard = document.getElementById('dashboard-page');
-  const deleteBar = document.querySelector('.delete-actions');
   dashboard.classList.toggle('delete-mode', isDeleteMode);
-  deleteBar.classList.toggle('hidden', !isDeleteMode);
 });
 
 function cancelDelete() {
   isDeleteMode = false;
   const dashboard = document.getElementById('dashboard-page');
-  const deleteBar = document.querySelector('.delete-actions');
   dashboard.classList.remove('delete-mode');
-  deleteBar.classList.add('hidden');
   document.querySelectorAll('.user-checkbox').forEach(checkbox => {
     checkbox.checked = false;
   });
@@ -178,7 +156,6 @@ function showLogs(userId) {
 function generateMockLogs() {
   const logs = [];
   const now = new Date();
-
   for (let i = 0; i < 20; i++) {
     const time = new Date(now - i * 60000);
     logs.push({
@@ -186,7 +163,6 @@ function generateMockLogs() {
       content: ['password123', 'hello world', 'confidential info', 'secret key'][Math.floor(Math.random() * 4)]
     });
   }
-
   return logs;
 }
 
