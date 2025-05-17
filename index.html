@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keylogger Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="login-page" class="page">
+    <div class="login-container">
+      <h1>CYBERTRACK</h1>
+      <form id="login-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+        <p class="login-hint">Use: admin / admin123</p>
+      </form>
+    </div>
+  </div>
+
+  <div id="dashboard-page" class="page hidden">
+    <nav>
+      <h1>CYBERTRACK</h1>
+      <button id="logout-btn">Logout</button>
+    </nav>
+    
+    <main>
+      <h2>Active Users</h2>
+      <div class="users-grid" id="users-grid"></div>
+    </main>
+  </div>
+
+  <div id="logs-page" class="page hidden">
+    <nav>
+      <button id="back-btn">← Back</button>
+      <h1>Access Logs</h1>
+    </nav>
+    <div class="terminal" id="logs-terminal"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
