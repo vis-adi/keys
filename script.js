@@ -14,15 +14,6 @@ const pages = {
   logs: document.getElementById('logs-page')
 };
 
-// Modal management
-const addUserModal = document.getElementById('add-user-modal');
-const addUserBtn = document.getElementById('add-user-btn');
-const cancelAddUserBtn = document.getElementById('cancel-add-user');
-const addUserForm = document.getElementById('add-user-form');
-const deleteBtn = document.getElementById('delete-mode-btn');
-
-let isDeleteMode = false;
-
 function showPage(pageId) {
   Object.values(pages).forEach(page => page.classList.add('hidden'));
   pages[pageId].classList.remove('hidden');
@@ -75,6 +66,14 @@ function renderDashboard() {
 }
 
 // Add user functionality
+const addUserModal = document.getElementById('add-user-modal');
+const addUserBtn = document.getElementById('add-user-btn');
+const cancelAddUserBtn = document.getElementById('cancel-add-user');
+const addUserForm = document.getElementById('add-user-form');
+const deleteBtn = document.getElementById('delete-mode-btn');
+
+let isDeleteMode = false;
+
 addUserBtn.addEventListener('click', () => {
   addUserModal.classList.remove('hidden');
 });
