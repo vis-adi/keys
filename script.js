@@ -47,11 +47,10 @@ function renderDashboard() {
         <p>Device: ${user.device}</p>
         <p>Status: ${user.status}</p>
       </div>
-      <div class="user-actions">
-        <button onclick="showLogs(${user.id})">Access Logs</button>
-      </div>
     </div>
   `).join('');
+}
+
 
   // Add delete actions bar if not exists
   if (!document.querySelector('.delete-actions')) {
