@@ -43,7 +43,7 @@ body {
   gap: 1rem;
 }
 
-input {
+input, select {
   padding: 0.5rem;
   background: #0f0f0f;
   border: 1px solid #333;
@@ -62,6 +62,29 @@ button:hover {
   background: #444;
 }
 
+.btn-primary {
+  background: #00ff41;
+  color: #0f0f0f;
+}
+
+.btn-primary:hover {
+  background: #00cc33;
+}
+
+.btn-secondary {
+  background: #333;
+  color: #00ff41;
+}
+
+.btn-danger {
+  background: #ff4141;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #cc3333;
+}
+
 .login-hint {
   margin-top: 1rem;
   font-size: 0.8rem;
@@ -76,6 +99,11 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 1rem;
 }
 
 main {
@@ -93,6 +121,7 @@ main {
   background: #1a1a1a;
   padding: 1rem;
   border-radius: 4px;
+  position: relative;
 }
 
 .user-card h3 {
@@ -102,6 +131,26 @@ main {
 .user-info {
   margin-bottom: 1rem;
   font-size: 0.9rem;
+}
+
+.user-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.delete-user {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: #ff4141;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.delete-user:hover {
+  color: #cc3333;
 }
 
 /* Logs Page */
@@ -123,4 +172,44 @@ main {
 .log-timestamp {
   color: #666;
   margin-right: 0.5rem;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #1a1a1a;
+  padding: 2rem;
+  border-radius: 4px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-content h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
 }

@@ -22,13 +22,36 @@
   <div id="dashboard-page" class="page hidden">
     <nav>
       <h1>CYBERTRACK</h1>
-      <button id="logout-btn">Logout</button>
+      <div class="nav-actions">
+        <button id="add-user-btn" class="btn-primary">Add User</button>
+        <button id="logout-btn">Logout</button>
+      </div>
     </nav>
     
     <main>
       <h2>Active Users</h2>
       <div class="users-grid" id="users-grid"></div>
     </main>
+
+    <!-- Add User Modal -->
+    <div id="add-user-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Add New User</h2>
+        <form id="add-user-form">
+          <input type="text" id="new-username" placeholder="Username" required>
+          <input type="text" id="new-device" placeholder="Device" required>
+          <select id="new-status" required>
+            <option value="active">Active</option>
+            <option value="idle">Idle</option>
+            <option value="offline">Offline</option>
+          </select>
+          <div class="modal-actions">
+            <button type="button" id="cancel-add-user" class="btn-secondary">Cancel</button>
+            <button type="submit" class="btn-primary">Add User</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
   <div id="logs-page" class="page hidden">
