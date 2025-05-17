@@ -33,7 +33,6 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
   }
 });
 
-// Dashboard
 function renderDashboard() {
   const grid = document.getElementById('users-grid');
   grid.innerHTML = users.map(user => `
@@ -49,19 +48,37 @@ function renderDashboard() {
       </div>
     </div>
   `).join('');
-}
 
+  attachCheckboxListeners();
 
-  // Add delete actions bar if not exists
+  // Ensure delete actions exist
   if (!document.querySelector('.delete-actions')) {
     const deleteActions = document.createElement('div');
-    deleteActions.className = 'delete-actions';
+    deleteActions.className = 'delete-actions hidden';
     deleteActions.innerHTML = `
       <button class="btn-secondary" onclick="cancelDelete()">Cancel</button>
       <button class="btn-danger" onclick="deleteSelectedUsers()">Delete Selected</button>
     `;
     document.getElementById('dashboard-page').appendChild(deleteActions);
   }
+}
+
+function attachCheckboxListeners() {
+  document.querySelectorAll('.user-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      const checked = document.querySelectorAll('.user-checkbox:checked');
+      const dashboard = document.getElementById('dashboard-page');
+      const deleteBar = document.querySelector('.delete-actions');
+
+      if (checked.length > 0) {
+        dashboard.classList.add('delete-mode');
+        deleteBar.classList.remove('hidden');
+      } else {
+        dashboard.classList.remove('delete-mode');
+        deleteBar.classList.add('hidden');
+      }
+    });
+  });
 }
 
 // Add user functionality
@@ -84,7 +101,7 @@ cancelAddUserBtn.addEventListener('click', () => {
 
 addUserForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  
+
   const newUser = {
     id: users.length + 1,
     username: document.getElementById('new-username').value,
@@ -92,26 +109,28 @@ addUserForm.addEventListener('submit', (e) => {
     status: document.getElementById('new-status').value
   };
 
-  // Hook for backend integration
   addUserToBackend(newUser);
-
   users.push(newUser);
   renderDashboard();
   addUserModal.classList.add('hidden');
   addUserForm.reset();
 });
 
-// Delete functionality
+// Manual delete mode toggle (optional button)
 deleteBtn.addEventListener('click', () => {
   isDeleteMode = !isDeleteMode;
   const dashboard = document.getElementById('dashboard-page');
+  const deleteBar = document.querySelector('.delete-actions');
   dashboard.classList.toggle('delete-mode', isDeleteMode);
+  deleteBar.classList.toggle('hidden', !isDeleteMode);
 });
 
 function cancelDelete() {
   isDeleteMode = false;
   const dashboard = document.getElementById('dashboard-page');
+  const deleteBar = document.querySelector('.delete-actions');
   dashboard.classList.remove('delete-mode');
+  deleteBar.classList.add('hidden');
   document.querySelectorAll('.user-checkbox').forEach(checkbox => {
     checkbox.checked = false;
   });
@@ -127,9 +146,7 @@ function deleteSelectedUsers() {
   }
 
   if (confirm(`Are you sure you want to delete ${selectedUsers.length} user(s)?`)) {
-    // Hook for backend integration
     selectedUsers.forEach(userId => deleteUserFromBackend(userId));
-    
     users = users.filter(user => !selectedUsers.includes(user.id));
     renderDashboard();
     cancelDelete();
@@ -138,12 +155,10 @@ function deleteSelectedUsers() {
 
 // Backend integration hooks
 function addUserToBackend(user) {
-  // TODO: Implement backend integration
   console.log('Adding user to backend:', user);
 }
 
 function deleteUserFromBackend(userId) {
-  // TODO: Implement backend integration
   console.log('Deleting user from backend:', userId);
 }
 
@@ -163,7 +178,7 @@ function showLogs(userId) {
 function generateMockLogs() {
   const logs = [];
   const now = new Date();
-  
+
   for (let i = 0; i < 20; i++) {
     const time = new Date(now - i * 60000);
     logs.push({
@@ -171,7 +186,7 @@ function generateMockLogs() {
       content: ['password123', 'hello world', 'confidential info', 'secret key'][Math.floor(Math.random() * 4)]
     });
   }
-  
+
   return logs;
 }
 
